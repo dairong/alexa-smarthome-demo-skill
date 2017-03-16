@@ -27,6 +27,34 @@ SAMPLE_APPLIANCES = [
         'additionalApplianceDetails': {}        
     },
     {
+        'applianceId': 'MultipleSwitch-001',
+        'manufacturerName': SAMPLE_MANUFACTURER,
+        'modelName': 'Switch',
+        'version': '1',
+        'friendlyName': 'Multiple Switch',
+        'friendlyDescription': 'On/off switch that is functional and reachable, but has duplicate with same name (1 of 2)',
+        'isReachable': True,
+        'actions': [
+            'turnOn',
+            'turnOff',
+        ],
+        'additionalApplianceDetails': {}        
+    },
+    {
+        'applianceId': 'MultipleSwitch-002',
+        'manufacturerName': SAMPLE_MANUFACTURER,
+        'modelName': 'Switch',
+        'version': '1',
+        'friendlyName': 'Multiple Switch',
+        'friendlyDescription': 'On/off switch that is functional and reachable, but has duplicate with same name (2 of 2)',
+        'isReachable': True,
+        'actions': [
+            'turnOn',
+            'turnOff',
+        ],
+        'additionalApplianceDetails': {}        
+    },
+    {
         'applianceId': 'Dimmer-001',
         'manufacturerName': SAMPLE_MANUFACTURER,
         'modelName': 'Dimmer',
