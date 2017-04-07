@@ -946,6 +946,13 @@ VALID_CURRENT_DEVICE_MODES = [
     'OTHER',
     'COLOR'
 ]
+VALID_LOCK_STATES = [
+    'LOCKED',
+    'UNLOCKED'
+]
+VALID_UNWILLING_ERROR_INFO_CODES = [
+    'ThermostatIsOff'
+]
 VALID_UNABLE_ERROR_INFO_CODES = [
     'DEVICE_AJAR',
     'DEVICE_BUSY',
@@ -955,27 +962,20 @@ VALID_UNABLE_ERROR_INFO_CODES = [
     'LOW_BATTERY',
     'NOT_CALIBRATED'
 ]
-VALID_UNWILLING_ERROR_INFO_CODES = [
-    'ThermostatIsOff'
-]
 VALID_TIME_UNITS = [
     'MINUTE',
     'HOUR',
     'DAY'
 ]
-VALID_LOCK_STATES = [
-    'LOCKED',
-    'UNLOCKED'
+REQUIRED_RESPONSE_KEYS = [
+    'header',
+    'payload'
 ]
 REQUIRED_HEADER_KEYS = [
     'namespace',
     'name',
     'payloadVersion',
     'messageId'
-]
-REQUIRED_RESPONSE_KEYS = [
-    'header',
-    'payload'
 ]
 REQUIRED_DISCOVERED_APPLIANCE_KEYS = [
     'applianceId',
@@ -1002,7 +1002,6 @@ def validateContext(context):
     """
 
     if context.get_remaining_time_in_millis() > 7000: raise_value_error(generate_error_message('Lambda','timeout must be 7 seconds or less',context))
-
 
 def validateResponse(request,response):
     """Validate the response to a request.
@@ -1118,7 +1117,6 @@ def validateDiscoveryResponse(request,response):
         if discoveredAppliance['additionalApplianceDetails'] is not None:
             if sys.getsizeof(discoveredAppliance['additionalApplianceDetails']) > 5000: raise_value_error(generate_error_message(response_name,'additionalApplianceDetails must not exceed 5000 bytes',discoveredAppliance))
 
-
 def validateControlResponse(request,response):
     """Validate the response to a Control request.
 
@@ -1185,7 +1183,7 @@ def validateControlResponse(request,response):
         if payload['previousState']['temperatureMode']['value'] not in VALID_TEMPERATURE_MODES: raise_value_error(generate_error_message(response_name,'payload.previousState.temperatureMode.value is invalid',payload))
 
     # Validate lock control response payload
-    if response_name in ['SetLockStateRequest']:
+    if response_name in ['SetLockStateResponse']:
         for required_key in ['lockState']:
             if required_key not in payload: raise_value_error(generate_error_message(response_name,'payload.' + format(required_key) + ' is missing',payload))
         if payload['lockState'] not in VALID_LOCK_STATES: raise_value_error(generate_error_message(response_name,'payload.lockState is invalid',payload))
@@ -1290,7 +1288,7 @@ def validateQueryResponse(request,response):
             if is_empty_string(payload['temperatureMode']['friendlyName']): raise_value_error(generate_error_message(response_name,'payload.temperatureMode.friendlyName must not be empty',payload))
 
     # Validate lock query response payload
-    if response_name in ['GetLockStateRequest']:
+    if response_name in ['GetLockStateResponse']:
         for required_key in ['lockState']:
             if required_key not in payload: raise_value_error(generate_error_message(response_name,'payload.' + format(required_key) + ' is missing',payload))
         if payload['lockState'] not in VALID_LOCK_STATES: raise_value_error(generate_error_message(response_name,'payload.lockState is invalid',payload))
@@ -1302,7 +1300,6 @@ def validateQueryResponse(request,response):
         for required_key in ['code','description']:
             if required_key not in payload['errorInfo']: raise_value_error(generate_error_message(response_name,'payload.errorInfo' + format(required_key) + ' is missing',payload))
         if payload['errorInfo']['code'] not in VALID_UNABLE_ERROR_INFO_CODES: raise_value_error(generate_error_message(response_name,'payload.errorInfo.code is invalid',payload))
-
 
 def validateResponseHeader(request,response):
     """Validate the response header.
